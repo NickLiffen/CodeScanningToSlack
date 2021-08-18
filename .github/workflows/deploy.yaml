@@ -41,7 +41,7 @@ jobs:
     - name: Print the Cloud Formation Linter Version & Run Linter.
       run: |
         cfn-lint --version
-        cfn-lint -t ./cf.yml
+        cfn-lint -t ./template.yml
   build-deploy:
     runs-on: ubuntu-latest
     environment: main
