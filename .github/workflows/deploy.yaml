@@ -61,4 +61,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - run: sam build --use-container
-      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region us-east-1  --s3-bucket  s3://code-scanning-to-github-bucket/
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region us-east-1  --s3-bucket arn:aws:s3:::code-scanning-to-github-bucket
