@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+
+Description: >
+  Code Scanning to Slack
+
+Resources: 
+  AccessLogs: 
+    Type: "AWS::Logs::LogGroup"
+
+  CodeScanningToSlack: 
+    Type: "AWS::Serverless::Function"
+    Properties: 
+      CodeUri: functions/codeScanningToSlack
+      Description: "A Lambda that connects GitHub Code Scanning Results to a Slack Channel"
+      Environment: 
+        Variables: 
+          NODE_ENV: Production
+          REGION: us-east-1
+      Events: 
+        GatewayEndpoint: 
+          Properties: 
+            ApiId: HttpApi
+            Method: POST
+            Path: /codescanning
+          Type: HttpApi
+      Handler: lib/main.handler
+      Policies:
+        - SSMParameterReadPolicy:
+            ParameterName: codescanning/*
+      Runtime: nodejs14.x
+      Timeout: 60
+      Tracing: Active
+
+  GitHubWebhookValidator:
+    Type: "AWS::Serverless::Function"
+    Properties: 
+      CodeUri: functions/githubWebhookValidator
+      Description: "A Lambda that returns wether an IP Address is sourced from a webhook or not."
+      Environment: 
+        Variables: 
+          NODE_ENV: Production
+          REGION: us-east-1
+      Handler: lib/main.handler
+      Policies:
+        - SSMParameterReadPolicy:
+            ParameterName: codescanning/*
+      Runtime: nodejs14.x
+      Timeout: 60
+      Tracing: Active
+
+  HttpApi: 
+    Type: "AWS::Serverless::HttpApi"
+    Properties: 
+      AccessLogSettings: 
+        DestinationArn: !GetAtt AccessLogs.Arn
+        Format: >-
+          { "requestId":"$context.requestId","ip": "$context.identity.sourceIp",
+          "requestTime":"$context.requestTime","httpMethod":"$context.httpMethod",
+          "routeKey":"$context.routeKey","status":"$context.status",
+          "protocol":"$context.protocol","responseLength":"$context.responseLength" }
+      Auth: 
+        Authorizers: 
+          LambdaAuthorizer: 
+            AuthorizerPayloadFormatVersion: "2.0"
+            EnableSimpleResponses: true
+            FunctionArn: !GetAtt GitHubWebhookValidator.Arn
+            Identity: 
+              Headers: 
+                - X-Hub-Signature
+        DefaultAuthorizer: LambdaAuthorizer
+      RouteSettings:
+        "POST /codescanning":
+          ThrottlingBurstLimit: 10
+
+

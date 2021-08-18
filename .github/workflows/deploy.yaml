@@ -1,0 +1,62 @@
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - './functions/codeScanningToSlack'
+          - './functions/githubSecretValidator'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Installing
+      run: npm install
+    - name: Building
+      run: npm run build
+  cloud_formation_linting:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: cfn-lint
+      uses: scottbrenner/cfn-lint-action@v2
+      with:
+        args: "cf.yml"
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment: main
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - run: sam build --use-container
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region us-east-1  --s3-bucket  ${{ secrets.AWS_S3_BUCKET_URI }}
