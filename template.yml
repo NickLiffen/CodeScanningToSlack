@@ -34,7 +34,7 @@ Resources:
   GitHubWebhookIPValidator:
     Type: "AWS::Serverless::Function"
     Properties: 
-      CodeUri: functions/GitHubWebhookIPValidator
+      CodeUri: functions/githubWebhookIPValidator
       Description: "A Lambda Function that validates the IP comes from GitHub."
       Environment: 
         Variables: 
