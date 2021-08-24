@@ -64,6 +64,7 @@ Resources:
             AuthorizerPayloadFormatVersion: "2.0"
             EnableSimpleResponses: true
             FunctionArn: !GetAtt GitHubWebhookIPValidator.Arn
+            FunctionInvokeRole: !GetAtt LambdaInvokeRole.Arn
             Identity: 
               Headers: 
                 - X-Hub-Signature
@@ -72,15 +73,32 @@ Resources:
         "POST /codescanning":
           ThrottlingBurstLimit: 10
 
-  InvokeAuth:
-    Type: AWS::Lambda::Permission
+  LambdaInvokeRole:
+    Type: 'AWS::IAM::Role'
     Properties:
-      FunctionName: !GetAtt GitHubWebhookIPValidator.Arn
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}::/apis/${HttpApi}'
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
 
+  LambdaInvokePolicy: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "LambdaInvokePolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Action: "lambda:InvokeFunction"
+            Resource: !GetAtt GitHubWebhookIPValidator.Arn
+      Roles: 
+        - Ref: "LambdaInvokeRole"
+        
 Outputs:
   HttpApiUrl:
     Description: URL of your API endpoint
