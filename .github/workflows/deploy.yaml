@@ -8,44 +8,9 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        directory:
-          - './functions/codeScanningToSlack'
-          - './functions/githubWebhookValidator'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ matrix.directory }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-    - name: Installing
-      run: npm install
-    - name: Building
-      run: npm run build
-  cloud_formation_linting:
-    strategy:
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup Cloud Formation Linter with Latest Version
-      uses: scottbrenner/cfn-lint-action@v2
-    - name: Print the Cloud Formation Linter Version & Run Linter.
-      run: |
-        cfn-lint --version
-        cfn-lint -t ./template.yml
   build-deploy:
     runs-on: ubuntu-latest
     environment: main
-    needs: build
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -54,11 +19,25 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8"
+      - name: Setup Cloud Formation Linter with Latest Version
+        uses: scottbrenner/cfn-lint-action@v2
+      - name: Print the Cloud Formation Linter Version & Run Linter.
+        run: |
+          cfn-lint --version
+          cfn-lint -t ./template.yml
       - uses: aws-actions/setup-sam@v1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+        run: |
+          cd ./functions/codeScanningToSlack 
+          npm install
+          npm run build
+        run: |
+          cd ./functions/githubWebhookValidator 
+          npm install
+          npm run build
       - run: sam build --use-container
       - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region us-east-1 --resolve-s3
