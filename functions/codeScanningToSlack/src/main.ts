@@ -21,9 +21,7 @@ export const handler = async (
 
     const secret = process.env.GITHUB_WEBHOOKS_SECRET;
     console.log(secret);
-    const algorithm = "sha256";
-
-    const signature = await sign({ secret, algorithm }, eventPayloadString);
+    const signature = headers["x-hub-signature-256"] as string;
     console.log(signature);
     const authedAnswer = await verify(secret, eventPayloadString, signature);
     console.log(authedAnswer);
