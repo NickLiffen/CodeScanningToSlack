@@ -58,7 +58,8 @@ Resources:
           { "requestId":"$context.requestId","ip": "$context.identity.sourceIp",
           "requestTime":"$context.requestTime","httpMethod":"$context.httpMethod",
           "routeKey":"$context.routeKey","status":"$context.status",
-          "protocol":"$context.protocol","responseLength":"$context.responseLength" }
+          "protocol":"$context.protocol","responseLength":"$context.responseLength",
+          "error" : $context.authorizer.error }
       Auth: 
         Authorizers: 
           LambdaAuthorizer: 
@@ -73,6 +74,15 @@ Resources:
         "POST /codescanning":
           ThrottlingBurstLimit: 10
 
+  InvokeAuth:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt GitHubWebhookValidator.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}::/apis/${HttpApi}'
+
 Outputs:
   HttpApiUrl:
     Description: URL of your API endpoint
@@ -82,5 +92,8 @@ Outputs:
     Description: Api id of HttpApi
     Value:
       Ref: HttpApi
+  HttpApiARN:
+    Description: Api id of HttpApi
+    Value: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}::/apis/${HttpApi}'
 
 
