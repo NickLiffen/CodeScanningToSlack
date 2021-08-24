@@ -20,7 +20,7 @@ Resources:
       Events: 
         GatewayEndpoint: 
           Properties: 
-            ApiId: HttpApi
+            ApiId: !Ref HttpApi
             Method: POST
             Path: /codescanning
           Type: HttpApi
