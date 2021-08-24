@@ -26,8 +26,7 @@ Resources:
           Type: HttpApi
       Handler: lib/main.handler
       Policies:
-        - SSMParameterReadPolicy:
-            ParameterName: codescanning/*
+        - AmazonSSMReadOnlyAccess
       Runtime: nodejs14.x
       Timeout: 60
       Tracing: Active
@@ -43,8 +42,7 @@ Resources:
           REGION: us-east-1
       Handler: lib/main.handler
       Policies:
-        - SSMParameterReadPolicy:
-            ParameterName: codescanning/*
+        - AmazonSSMReadOnlyAccess
       Runtime: nodejs14.x
       Timeout: 60
       Tracing: Active
