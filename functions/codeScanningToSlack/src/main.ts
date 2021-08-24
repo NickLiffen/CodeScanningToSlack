@@ -1,7 +1,7 @@
 import { ssm } from "./ssm";
 // import { IncomingWebhook } from '@slack/webhook'
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
-import { sign, verify } from "@octokit/webhooks-methods";
+import { verify } from "@octokit/webhooks-methods";
 
 export const handler = async (
   event: APIGatewayProxyEventV2
