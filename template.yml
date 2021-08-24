@@ -35,7 +35,7 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties: 
       CodeUri: functions/githubWebhookValidator
-      Description: "A Lambda that returns wether an IP Address is sourced from a webhook or not."
+      Description: "A Lambda Function that validates the IP comes from GitHub and the Secret in the payload matches the Secret set within GitHub."
       Environment: 
         Variables: 
           NODE_ENV: Production
