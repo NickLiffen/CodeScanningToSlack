@@ -31,11 +31,11 @@ Resources:
       Timeout: 60
       Tracing: Active
 
-  GitHubWebhookValidator:
+  GitHubWebhookIPValidator:
     Type: "AWS::Serverless::Function"
     Properties: 
-      CodeUri: functions/githubWebhookValidator
-      Description: "A Lambda Function that validates the IP comes from GitHub and the Secret in the payload matches the Secret set within GitHub."
+      CodeUri: functions/GitHubWebhookIPValidator
+      Description: "A Lambda Function that validates the IP comes from GitHub."
       Environment: 
         Variables: 
           NODE_ENV: Production
@@ -63,7 +63,7 @@ Resources:
           LambdaAuthorizer: 
             AuthorizerPayloadFormatVersion: "2.0"
             EnableSimpleResponses: true
-            FunctionArn: !GetAtt GitHubWebhookValidator.Arn
+            FunctionArn: !GetAtt GitHubWebhookIPValidator.Arn
             Identity: 
               Headers: 
                 - X-Hub-Signature
@@ -75,7 +75,7 @@ Resources:
   InvokeAuth:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt GitHubWebhookValidator.Arn
+      FunctionName: !GetAtt GitHubWebhookIPValidator.Arn
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'

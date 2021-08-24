@@ -1,5 +1,5 @@
 {
-  "name": "github-webhook-validator",
+  "name": "github-webhook-ip-validator",
   "version": "1.0.0",
   "description": "Lambda which validates the webhook comes from GitHub",
   "scripts": {
