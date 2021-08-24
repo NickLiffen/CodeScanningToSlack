@@ -33,10 +33,12 @@ jobs:
           aws-region: us-east-1
       - run: |
           cd ./functions/codeScanningToSlack 
+          npm cache clean --force
           npm install
           npm run build
       - run: |
           cd ./functions/githubWebhookIPValidator 
+          npm cache clean --force
           npm install
           npm run build
       - run: sam build --use-container
