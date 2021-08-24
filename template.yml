@@ -35,7 +35,7 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties: 
       CodeUri: functions/githubWebhookIPValidator
-      Description: "A Lambda Function that validates the IP comes from GitHub."
+      Description: "A Lambda Function that validates the IP comes from GitHub"
       Environment: 
         Variables: 
           NODE_ENV: Production
@@ -86,12 +86,5 @@ Outputs:
     Description: URL of your API endpoint
     Value:
       Fn::Sub: 'https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/'
-  HttpApiId:
-    Description: Api id of HttpApi
-    Value:
-      Ref: HttpApi
-  HttpApiARN:
-    Description: Api id of HttpApi
-    Value: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}::/apis/${HttpApi}'
 
 
