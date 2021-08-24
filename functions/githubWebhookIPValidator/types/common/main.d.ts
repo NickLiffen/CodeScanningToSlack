@@ -9,7 +9,7 @@ declare namespace NodeJS {
 }
 
 interface SimpleResponse {
-  isAuthorized: boolean
+  isAuthorized: boolean;
 }
 
 interface IP {
