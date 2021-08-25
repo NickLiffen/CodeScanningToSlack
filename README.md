@@ -43,7 +43,7 @@ The following technologies are used throughout this solution:
 
 ## Architecture
 
-![GitHub Code Scanning to Slack Architecure](https://lucid.app/documents/embeddedchart/f2750aee-1721-4931-8db6-8f9d3ff6f021)
+![GitHub Code Scanning to Slack Architecure](https://lucid.app/publicSegments/view/c953c8c6-5a7e-4a1d-9e5e-be0838e156eb/image.png)
 
 ## Pre-Req's
 
