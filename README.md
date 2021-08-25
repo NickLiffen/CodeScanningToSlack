@@ -44,7 +44,7 @@ The following technologies are used throughout this solution:
 ## Architecture
 
 ![GitHub Code Scanning to Slack Architecure](https://lucid.app/publicSegments/view/c953c8c6-5a7e-4a1d-9e5e-be0838e156eb/image.png)
-
+https://i.ibb.co/MnJ60KZ/Example.png
 ## Pre-Req's
 
 1. Access to an AWS environment.
@@ -153,6 +153,11 @@ Click *Save*
 
 Done! From now on, whenever a Code Scanning Alert gets: `created`, `fixed` and `closed_by_user`, a notification will get dropped into Slack. 
 
+## Example
+
+The below shows an example of what a message would look like in Slack. This specific message is when an alert gets manually closed. 
+
+![Example Showing a Code Scanning Event being Closed](https://i.ibb.co/MnJ60KZ/Example.png)
 
 ## FAQ's
 
