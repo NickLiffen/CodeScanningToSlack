@@ -19,10 +19,9 @@ export const getGitHubIpRange = async (
         }
         `
     )) as IP;
-    console.log("Got IP Addresses from graphqlWithAuth", meta);
     return meta;
   } catch (err) {
-    console.error("Error Calling Function (graphqlWithAuth)", err);
+    console.error("Error within function (graphqlWithAuth)", err);
     throw err;
   }
 };

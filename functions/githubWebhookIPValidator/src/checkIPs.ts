@@ -24,14 +24,11 @@ export const checkIPs = async (
     ipToCheck = ipFromRequest;
   }
 
-  console.log("keys", keys);
-  console.log("ipToCheck", ipToCheck);
-
   try {
     const response = await findIP(keys, ipToCheck);
     return response;
   } catch (err) {
-    console.error("Error Calling Function (findIP)", err);
+    console.error("Error within function (findIP)", err);
     throw err;
   }
 };

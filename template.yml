@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: "AWS::Serverless-2016-10-31"
 
 Description: >
-  Code Scanning to Slack
+  Code Scanning Alerts to Slack
 
 Resources: 
   AccessLogs: 
@@ -16,7 +16,7 @@ Resources:
       Environment: 
         Variables: 
           NODE_ENV: Production
-          REGION: us-east-1
+          REGION: !Ref "AWS::Region"
       Events: 
         GatewayEndpoint: 
           Properties: 
@@ -39,7 +39,7 @@ Resources:
       Environment: 
         Variables: 
           NODE_ENV: Production
-          REGION: us-east-1
+          REGION: !Ref "AWS::Region"
       Handler: lib/main.handler
       Policies:
         - AmazonSSMReadOnlyAccess
@@ -101,7 +101,7 @@ Resources:
         
 Outputs:
   HttpApiUrl:
-    Description: URL of your API endpoint
+    Description: HTTP API URL
     Value:
       Fn::Sub: 'https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/'
 

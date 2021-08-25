@@ -18,7 +18,8 @@ export const ssm = async (): Promise<void> => {
         process.env[name] = value;
       });
     }
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error("Error within function (ssm)", err);
+    throw err;
   }
 };

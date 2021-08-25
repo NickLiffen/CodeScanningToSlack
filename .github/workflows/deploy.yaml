@@ -10,6 +10,8 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    env:
+      REGION: us-east-1
     environment: main
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +32,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ env.REGION }}
       - run: |
           cd ./functions/codeScanningToSlack 
           npm cache clean --force
@@ -42,4 +44,4 @@ jobs:
           npm install
           npm run build
       - run: sam build --use-container
-      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region us-east-1 --resolve-s3
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3

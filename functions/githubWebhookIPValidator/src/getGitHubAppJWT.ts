@@ -23,7 +23,7 @@ export const githubAuth = async (): Promise<string | unknown> => {
     const { token } = await auth({ type: "installation" });
     return token;
   } catch (err) {
-    console.error("Error Generating JWT", err);
-    return err;
+    console.error("Error within function (githubAuth)", err);
+    throw err;
   }
 };

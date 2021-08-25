@@ -8,11 +8,7 @@ import { checkIPs } from "./checkIPs";
 export const handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<SimpleResponse> => {
-  console.log("event", event);
-
   const sourceIP = event.requestContext.http.sourceIp;
-
-  console.log("sourceIP", sourceIP);
 
   try {
     await ssm();
@@ -24,6 +20,8 @@ export const handler = async (
     };
   } catch (e) {
     console.error(e);
-    throw e;
+    return {
+      isAuthorized: false,
+    };
   }
 };
