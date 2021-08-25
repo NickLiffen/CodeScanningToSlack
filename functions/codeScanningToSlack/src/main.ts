@@ -10,13 +10,7 @@ export const handler = async (
   try {
     await ssm();
 
-    const refsToBeNotifiedAbout = [
-      "refs/heads/main",
-      "refs/heads/dev",
-      "refs/heads/staging",
-    ] as string[];
-
-    const response = await secretVerifier(event) as boolean;
+    const response = (await secretVerifier(event)) as boolean;
 
     if (!response)
       return {
@@ -30,6 +24,12 @@ export const handler = async (
       JSON.parse(body);
 
     let IncomingWebhookSendArguments: IncomingWebhookSendArguments = {};
+
+    const refsToBeNotifiedAbout = [
+      "refs/heads/main",
+      "refs/heads/dev",
+      "refs/heads/staging",
+    ] as string[];
 
     if (action === "closed_by_user") {
       IncomingWebhookSendArguments = await closedByUserMessage(
