@@ -4,22 +4,22 @@ Transform: "AWS::Serverless-2016-10-31"
 Description: >
   Code Scanning Alerts to Slack
 
-Resources: 
-  AccessLogs: 
+Resources:
+  AccessLogs:
     Type: "AWS::Logs::LogGroup"
 
-  CodeScanningToSlack: 
+  CodeScanningToSlack:
     Type: "AWS::Serverless::Function"
-    Properties: 
+    Properties:
       CodeUri: functions/codeScanningToSlack
       Description: "A Lambda that connects GitHub Code Scanning Results to a Slack Channel"
-      Environment: 
-        Variables: 
+      Environment:
+        Variables:
           NODE_ENV: Production
           REGION: !Ref "AWS::Region"
-      Events: 
-        GatewayEndpoint: 
-          Properties: 
+      Events:
+        GatewayEndpoint:
+          Properties:
             ApiId: !Ref HttpApi
             Method: POST
             Path: /codescanning
@@ -33,11 +33,11 @@ Resources:
 
   GitHubWebhookIPValidator:
     Type: "AWS::Serverless::Function"
-    Properties: 
+    Properties:
       CodeUri: functions/githubWebhookIPValidator
       Description: "A Lambda Function that validates the IP comes from GitHub"
-      Environment: 
-        Variables: 
+      Environment:
+        Variables:
           NODE_ENV: Production
           REGION: !Ref "AWS::Region"
       Handler: lib/main.handler
@@ -47,10 +47,10 @@ Resources:
       Timeout: 60
       Tracing: Active
 
-  HttpApi: 
+  HttpApi:
     Type: "AWS::Serverless::HttpApi"
-    Properties: 
-      AccessLogSettings: 
+    Properties:
+      AccessLogSettings:
         DestinationArn: !GetAtt AccessLogs.Arn
         Format: >-
           { "requestId":"$context.requestId","ip": "$context.identity.sourceIp",
@@ -58,15 +58,15 @@ Resources:
           "routeKey":"$context.routeKey","status":"$context.status",
           "protocol":"$context.protocol","responseLength":"$context.responseLength",
           "error" : $context.authorizer.error }
-      Auth: 
-        Authorizers: 
-          LambdaAuthorizer: 
+      Auth:
+        Authorizers:
+          LambdaAuthorizer:
             AuthorizerPayloadFormatVersion: "2.0"
             EnableSimpleResponses: true
             FunctionArn: !GetAtt GitHubWebhookIPValidator.Arn
             FunctionInvokeRole: !GetAtt LambdaInvokeRole.Arn
-            Identity: 
-              Headers: 
+            Identity:
+              Headers:
                 - X-Hub-Signature
         DefaultAuthorizer: LambdaAuthorizer
       RouteSettings:
@@ -74,7 +74,7 @@ Resources:
           ThrottlingBurstLimit: 10
 
   LambdaInvokeRole:
-    Type: 'AWS::IAM::Role'
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
@@ -84,25 +84,23 @@ Resources:
               Service:
                 - apigateway.amazonaws.com
             Action:
-              - 'sts:AssumeRole'
+              - "sts:AssumeRole"
 
-  LambdaInvokePolicy: 
+  LambdaInvokePolicy:
     Type: "AWS::IAM::Policy"
-    Properties: 
+    Properties:
       PolicyName: "LambdaInvokePolicy"
-      PolicyDocument: 
+      PolicyDocument:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           - Effect: "Allow"
             Action: "lambda:InvokeFunction"
             Resource: !GetAtt GitHubWebhookIPValidator.Arn
-      Roles: 
+      Roles:
         - Ref: "LambdaInvokeRole"
-        
+
 Outputs:
   HttpApiUrl:
     Description: HTTP API URL
     Value:
-      Fn::Sub: 'https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/'
-
-
+      Fn::Sub: "https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"

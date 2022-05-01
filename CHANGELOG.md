@@ -9,5 +9,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Lambda Function that Validates Webhooks are from GitHub
 - Lambda Function that proxies results from GitHub to Slack
-- GitHub Workflow that deploys solution to AWS. 
+- GitHub Workflow that deploys solution to AWS.
 - Infrastructure as Code writtin in Cloud Formation
