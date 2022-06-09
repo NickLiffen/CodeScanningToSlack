@@ -8,6 +8,10 @@ import { checkIPs } from "./checkIPs";
 export const handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<SimpleResponse> => {
+  
+  console.log('Event:', event);
+  console.log('Event Body: ', event.body);
+
   const sourceIP = event.requestContext.http.sourceIp;
 
   try {
