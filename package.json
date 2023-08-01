@@ -32,15 +32,15 @@
     "husky": "^8.0.3",
     "@tsconfig/node14": "^14.1.0",
     "@types/json-schema": "^7.0.12",
-    "@types/node": "^20.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "eslint": "^8.44.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.8",
+    "@types/node": "^20.4.5",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
-    "tslib": "^2.6.0",
+    "tslib": "^2.6.1",
     "typescript": "^5.1.6"
   }
 }
