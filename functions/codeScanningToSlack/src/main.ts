@@ -5,7 +5,7 @@ import { secretVerifier } from "./verify";
 import { fixedMessage, createdMessage, closedByUserMessage } from "./messages";
 
 export const handler = async (
-  event: APIGatewayProxyEventV2
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
   try {
     await ssm();
@@ -35,7 +35,7 @@ export const handler = async (
       IncomingWebhookSendArguments = await closedByUserMessage(
         alert,
         repository,
-        organization
+        organization,
       );
     }
 
@@ -44,7 +44,7 @@ export const handler = async (
         alert,
         repository,
         organization,
-        commit_oid
+        commit_oid,
       );
     }
 
@@ -53,7 +53,7 @@ export const handler = async (
         alert,
         repository,
         organization,
-        commit_oid
+        commit_oid,
       );
     }
 

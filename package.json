@@ -30,7 +30,7 @@
   "homepage": "https://github.com/NickLiffen/codescanningtoslack#readme",
   "devDependencies": {
     "husky": "^8.0.3",
-    "@tsconfig/node14": "^14.1.0",
+    "@tsconfig/node20": "^14.1.0",
     "@types/json-schema": "^7.0.14",
     "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.9.1",

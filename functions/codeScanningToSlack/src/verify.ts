@@ -2,7 +2,7 @@ import { verify } from "@octokit/webhooks-methods";
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 
 export const secretVerifier = async (
-  event: APIGatewayProxyEventV2
+  event: APIGatewayProxyEventV2,
 ): Promise<boolean> => {
   try {
     const body = event.body as string;
@@ -10,7 +10,7 @@ export const secretVerifier = async (
     const authedAnswer = await verify(
       process.env.GITHUB_WEBHOOKS_SECRET,
       body,
-      signature
+      signature,
     );
     return authedAnswer;
   } catch (err) {

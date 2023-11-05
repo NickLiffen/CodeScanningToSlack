@@ -3,7 +3,7 @@ export const createdMessage = async (
   alert: any,
   repository: any,
   organization: any,
-  commit_oid: string
+  commit_oid: string,
 ): Promise<IncomingWebhookSendArguments> => {
   return {
     text: `A Code Scanning alert from ${alert.tool.name} has just been found and created. The repository where the alert has been found is ${repository.name} (within the ${organization.login} organisation). Information about the alert can be found below.`,

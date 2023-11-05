@@ -1,7 +1,7 @@
 import { graphql } from "@octokit/graphql";
 
 export const getGitHubIpRange = async (
-  token: string
+  token: string,
 ): Promise<hookIPAddress> => {
   const graphqlWithAuth = graphql.defaults({
     headers: {
@@ -17,7 +17,7 @@ export const getGitHubIpRange = async (
             hookIpAddresses
           }
         }
-        `
+        `,
     )) as IP;
     return meta;
   } catch (err) {

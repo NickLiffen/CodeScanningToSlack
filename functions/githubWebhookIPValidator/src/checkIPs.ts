@@ -12,7 +12,7 @@ const findIP = (keys: string[], ipToCheck: string) => {
 
 export const checkIPs = async (
   meta: hookIPAddress,
-  ipFromRequest: string
+  ipFromRequest: string,
 ): Promise<boolean> => {
   let ipToCheck;
 

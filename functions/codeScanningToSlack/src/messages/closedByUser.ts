@@ -2,7 +2,7 @@ import { IncomingWebhookSendArguments } from "@slack/webhook";
 export const closedByUserMessage = async (
   alert: any,
   repository: any,
-  organization: any
+  organization: any,
 ): Promise<IncomingWebhookSendArguments> => {
   return {
     text: `A Code Scanning alert has just manually been closed. It has been closed by ${alert.dismissed_by.login}. The repository where it has been closed is ${repository.name} (within the ${organization.login} organisation). Information about the closed alert can be found below.`,
