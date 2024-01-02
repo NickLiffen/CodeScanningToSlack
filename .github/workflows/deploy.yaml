@@ -42,10 +42,15 @@ jobs:
           lowercaseDashRepoName="$(echo ${lowercase// /-})" # Replacing spaces with dashses
 
           if [ ${#lowercaseDashRepoName} -gt 100 ]; then
-            lowercaseDashRepoName=${lowercaseDashRepoName:0:100}
+            lowercaseDashRepoName=${lowercaseDashRepoName:0:100} # Limiting to only 100 characters
           fi
 
           echo "BRANCH=$(echo "$lowercaseDashRepoName")" >> "$GITHUB_OUTPUT"
+
+      - name: Echo'ing Branch Names (For Debugging)
+        run: |
+          echo ${{ steps.formatted_branch.outputs.BRANCH }}
+          echo ${{ steps.extract_branch.outputs.branch }}        
 
       - name: Setup Cloud Formation Linter with Latest Version
         uses: scottbrenner/cfn-lint-action@v2

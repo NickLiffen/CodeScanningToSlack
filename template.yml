@@ -27,7 +27,7 @@ Resources:
       Handler: lib/main.handler
       Policies:
         - AmazonSSMReadOnlyAccess
-      Runtime: nodejs14.x
+      Runtime: nodejs20.x
       Timeout: 60
       Tracing: Active
 
@@ -43,7 +43,7 @@ Resources:
       Handler: lib/main.handler
       Policies:
         - AmazonSSMReadOnlyAccess
-      Runtime: nodejs14.x
+      Runtime: nodejs20.x
       Timeout: 60
       Tracing: Active
 
