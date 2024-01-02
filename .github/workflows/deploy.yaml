@@ -52,5 +52,10 @@ jobs:
         shell: bash
         run: |
           echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+          echo "strippedBranchName=$(echo $branch | sed -e 's/\//-/g')" >> $GITHUB_OUTPUT
+          echo "finalBranch${strippedBranchName:0:100}" >> $GITHUB_OUTPUT
+          echo $branch
+          echo $strippedBranchName
+          echo $finalBranch
       - run: sam build --use-container
-      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CodeScanningToSlackStack-${{ steps.extract_branch.outputs.branch }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CodeScanningToSlackStack-${{ steps.extract_branch.outputs.finalBranch }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
