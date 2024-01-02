@@ -25,6 +25,33 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.12"
+
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Clean up Branch Name (Valid for CloudFormation Stack Name)
+        id: formatted_branch
+        env:
+          DATA: ${{ steps.extract_branch.outputs.branch }}
+        run: |
+          noSpecialChars="$(echo "$DATA" | sed 's/[^a-zA-Z0-9 ]//g')" # Removing any character apart from numbers letters and spaces 
+          lowercase="$(echo "$noSpecialChars" | awk '{print tolower($0)}')" # Making Lowercase
+          lowercaseDashRepoName="$(echo ${lowercase// /-})" # Replacing spaces with dashses
+
+          if [ ${#lowercaseDashRepoName} -gt 100 ]; then
+            lowercaseDashRepoName=${lowercaseDashRepoName:0:100} # Limiting to only 100 characters
+          fi
+
+          echo "BRANCH=$(echo "$lowercaseDashRepoName")" >> "$GITHUB_OUTPUT"
+
+      - name: Echo'ing Branch Names (For Debugging)
+        run: |
+          echo ${{ steps.formatted_branch.outputs.BRANCH }}
+          echo ${{ steps.extract_branch.outputs.branch }}        
+
       - name: Setup Cloud Formation Linter with Latest Version
         uses: scottbrenner/cfn-lint-action@v2
       - name: Print the Cloud Formation Linter Version & Run Linter.
@@ -47,10 +74,5 @@ jobs:
           npm cache clean --force
           npm install
           npm run build
-      - name: Extract branch name
-        id: extract_branch
-        shell: bash
-        run: |
-          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       - run: sam build --use-container
-      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CodeScanningToSlackStack-${{ steps.extract_branch.outputs.branch }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CodeScanningToSlackStack-${{ steps.formatted_branch.outputs.BRANCH }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
