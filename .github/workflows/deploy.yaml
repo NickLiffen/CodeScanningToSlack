@@ -34,7 +34,7 @@ jobs:
       - uses: aws-actions/setup-sam@v2
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          audience: sts.amazonaws.com.cn
+          audience: sts.amazonaws.com
           aws-region: ${{ env.REGION }}
           role-to-assume: arn:aws:iam::377117578606:role/CodeScanningToSlack
       - run: |
