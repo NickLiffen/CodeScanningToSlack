@@ -53,7 +53,7 @@ jobs:
         run: |
           echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
           echo "strippedBranchName=$(echo $branch | sed -e 's/\//-/g')" >> $GITHUB_OUTPUT
-          echo "finalBranch${strippedBranchName:0:100}" >> $GITHUB_OUTPUT
+          echo "finalBranch=${strippedBranchName:0:100}" >> $GITHUB_OUTPUT
           echo $branch
           echo $strippedBranchName
           echo $finalBranch
