@@ -53,4 +53,4 @@ jobs:
         run: |
           echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       - run: sam build --use-container
-      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name codeScanning-${{ steps.extract_branch.outputs.branch }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
+      - run: sam deploy --debug --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CodeScanningToSlackStack-${{ steps.extract_branch.outputs.branch }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }} --resolve-s3
